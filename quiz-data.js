@@ -260,10 +260,7 @@ const quizData = [
         answer: 3,
         explanation: "기초삼동변의 작용은 충기작용, 제동작용, 완해작용으로 구분된다"
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
 
-    // --- [디젤 - 기관] 문제 ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -524,10 +521,6 @@ const quizData = [
         answer: 1, // 정답: ② 청정공기 계통이 완전하다
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
-
-    // --- [디젤 - 제동] 문제 (추가분) ---
     {
         category: "디젤",
         subCategory: "제동",
@@ -723,10 +716,7 @@ const quizData = [
         answer: 3,
         explanation: "상용제동 시 26F 제어변의 상용 제동 압력제한변은 35 ~ 62 psi 로 조정하고 비상제동 적용 중 최대 제동통 압력을 얻기 위해 보조공기통 압력을 최대로 J-1 중계변 막판에 공급하기 위하여 비상제동통 압력제한변 최대 압력을 68 psi 이하로 조정 한다"
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
 
-    // --- [디젤 - 기관] 문제 (20개) ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -988,7 +978,6 @@ const quizData = [
         explanation: ""
     },
 
-    // --- [디젤 - 전기] 문제 (20개) ---
     {
         category: "디젤",
         subCategory: "전기",
@@ -1249,10 +1238,7 @@ const quizData = [
         answer: 0, // 정답: ①
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
 
-    // --- [디젤 - 기관] 문제 (추가분 60개) ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -2033,10 +2019,7 @@ const quizData = [
         answer: 1, // 정답: ② (인덱스 1)
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
 
-    // --- [디젤 - 기관] 문제 (추가분 94개) ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -3259,10 +3242,6 @@ const quizData = [
         answer: 1, // 정답: 2 (인덱스 1)
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
-
-    // --- [디젤 - 기관] 문제 (추가분 18개 - 문제 95번부터 112번까지) ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -3497,10 +3476,6 @@ const quizData = [
         answer: 3, // 정답: 4 (인덱스 3)
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
-
-    // --- [디젤 - 기관] 문제 (추가분 54개) ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -4190,10 +4165,6 @@ const quizData = [
         answer: 3, // 정답: 4 (인덱스 3)
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
-
-    // --- [디젤 - 기관] 문제 (추가분 43개) ---
     {
         category: "디젤",
         subCategory: "기관",
@@ -4753,10 +4724,7 @@ const quizData = [
         answer: 2, // 정답: ③ (인덱스 2)
         explanation: ""
     }
-// quiz-data.js 파일의 const quizData = [ ... ]; 배열 안에
-// 아래의 객체들을 추가(복사-붙여넣기) 하시면 됩니다.
 
-    // --- 2012-1 중간고사 [디젤 - 제동] ---
     {
         category: "디젤",
         subCategory: "제동",
@@ -6769,5 +6737,5 @@ const quizData = [
         answer: 1, // 정답: ㈏
         explanation: "홀딩제동은 전기적으로 동작한다."
     }
-// --- 여기까지 추가 ---
+
 ];
