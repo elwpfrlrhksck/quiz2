@@ -4869,7 +4869,6 @@ const quizData = [
         explanation: "MU-2A변 보조위치(6 또는 26)에서 주공기가 F-1선택변의 전환변을 동작시켜 단독제동변의 공기통로를 차단한다."
     },
 
-    // --- 2012-1 중간고사 [디젤 - 기관/전기] ---
     {
         category: "디젤",
         subCategory: "전기",
@@ -5014,7 +5013,6 @@ const quizData = [
         explanation: "레비린스 씰은 '기름이 공기쪽으로', '공기가 기름쪽으로' 이동하는 것을 모두 방지한다."
     },
 
-    // --- 2012-1 중간고사 [디젤 - 전기] ---
     {
         category: "디젤",
         subCategory: "전기",
@@ -5171,8 +5169,6 @@ const quizData = [
         answer: 3, // 정답: ④
         explanation: "THS 6단 정상/과열 모두 AV, BV, CV, DV가 여자된다."
     },
-
-    // --- 2012-2기 중간고사 [디젤 - 제동/기관/차량] ---
     {
         category: "디젤",
         subCategory: "제동",
@@ -5693,8 +5689,6 @@ const quizData = [
         answer: 2, // 정답: 3
         explanation: "견인전동기 회전속도 상승 시 배압으로 전류는 낮아지고 전압은 높아진다. (배압이 발생하면 저항이 커져 전류가 낮아짐)"
     },
-
-    // --- 2012-2기말고사 [디젤 - 전기/제동/기관/차량] ---
     {
         category: "디젤",
         subCategory: "전기",
@@ -6215,8 +6209,6 @@ const quizData = [
         answer: 2, // 정답: 3
         explanation: "CDC 액체변속기 윤활유 최고 제한온도는 110℃이다."
     },
-
-    // --- 디젤기관 예상문제 [디젤 - 기관/전기] ---
     {
         category: "디젤",
         subCategory: "기관",
