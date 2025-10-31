@@ -259,8 +259,7 @@ const quizData = [
         ],
         answer: 3,
         explanation: "기초삼동변의 작용은 충기작용, 제동작용, 완해작용으로 구분된다"
-    }
-
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -520,7 +519,7 @@ const quizData = [
         ],
         answer: 1, // 정답: ② 청정공기 계통이 완전하다
         explanation: ""
-    }
+    },
     {
         category: "디젤",
         subCategory: "제동",
@@ -715,8 +714,7 @@ const quizData = [
         ],
         answer: 3,
         explanation: "상용제동 시 26F 제어변의 상용 제동 압력제한변은 35 ~ 62 psi 로 조정하고 비상제동 적용 중 최대 제동통 압력을 얻기 위해 보조공기통 압력을 최대로 J-1 중계변 막판에 공급하기 위하여 비상제동통 압력제한변 최대 압력을 68 psi 이하로 조정 한다"
-    }
-
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -977,7 +975,6 @@ const quizData = [
         answer: 1, // 정답: ②
         explanation: ""
     },
-
     {
         category: "디젤",
         subCategory: "전기",
@@ -1237,8 +1234,7 @@ const quizData = [
         ],
         answer: 0, // 정답: ①
         explanation: ""
-    }
-
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -2018,8 +2014,7 @@ const quizData = [
         ],
         answer: 1, // 정답: ② (인덱스 1)
         explanation: ""
-    }
-
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -3241,7 +3236,7 @@ const quizData = [
         ],
         answer: 1, // 정답: 2 (인덱스 1)
         explanation: ""
-    }
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -3475,7 +3470,7 @@ const quizData = [
         ],
         answer: 3, // 정답: 4 (인덱스 3)
         explanation: ""
-    }
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -4164,7 +4159,7 @@ const quizData = [
         ],
         answer: 3, // 정답: 4 (인덱스 3)
         explanation: ""
-    }
+    },
     {
         category: "디젤",
         subCategory: "기관",
@@ -4723,8 +4718,7 @@ const quizData = [
         ],
         answer: 2, // 정답: ③ (인덱스 2)
         explanation: ""
-    }
-
+    },
     {
         category: "디젤",
         subCategory: "제동",
@@ -4868,7 +4862,6 @@ const quizData = [
         answer: 0, // 정답: 가
         explanation: "MU-2A변 보조위치(6 또는 26)에서 주공기가 F-1선택변의 전환변을 동작시켜 단독제동변의 공기통로를 차단한다."
     },
-
     {
         category: "디젤",
         subCategory: "전기",
@@ -5012,7 +5005,6 @@ const quizData = [
         answer: 3, // 정답: 라
         explanation: "레비린스 씰은 '기름이 공기쪽으로', '공기가 기름쪽으로' 이동하는 것을 모두 방지한다."
     },
-
     {
         category: "디젤",
         subCategory: "전기",
