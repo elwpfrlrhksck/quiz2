@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // (1) 로컬 스토리지 관리 함수 (진행 상황 저장 및 불러오기)
     // ========================================================================
     // 순차 풀이 진행 상황 저장 (카테고리 키: 인덱스)
+    // **[수정]** 'diesel_electric_equipment'와 'diesel_electric_circuit'을 
+    // 실제 데이터 키인 'diesel_electric' 하나로 통일했습니다.
     let sequentialProgress = {
         'diesel_engine': 0,
-        'diesel_electric_equipment': 0, // NEW: 전기장치
-        'diesel_electric_circuit': 0,     // NEW: 전기회로
+        'diesel_electric': 0, // <-- 디젤-전기 전체 진행 상황 관리 키
         'diesel_braking': 0,
         'rail_track': 0,
         'rail_signal': 0,
@@ -56,10 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPracticeCategories = []; // 현재 풀이 중인 카테고리 배열 (순차 풀이 시 사용)
 
     // 카테고리 이름 매핑 (NEW: 세부 카테고리 추가)
+    // **[수정]** 세부 카테고리 대신 디젤-전기 전체 키 사용
     const categoryNames = {
         'diesel_engine': '디젤-기관',
-        'diesel_electric_equipment': '디젤-전기-장치',
-        'diesel_electric_circuit': '디젤-전기-회로',
+        'diesel_electric': '디젤-전기', // <-- 이 키로 통일
         'diesel_braking': '디젤-제동',
         'rail_track': '시스템-선로',
         'rail_signal': '시스템-신호',
@@ -73,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuScreen = document.getElementById('menu-screen');
     const practiceSetupScreen = document.getElementById('practice-setup-screen');
     const testSetupScreen = document.getElementById('test-setup-screen');
-    const electricSetupScreen = document.getElementById('electric-setup-screen'); // NEW
-    const electricCategoryContainer = document.getElementById('electric-category-container'); // NEW
+    const electricSetupScreen = document.getElementById('electric-setup-screen');
+    const electricCategoryContainer = document.getElementById('electric-category-container');
     const quizScreen = document.getElementById('quiz-screen');
     const resultsScreen = document.getElementById('results-screen');
     
@@ -146,11 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentMode = 'practice_setup';
         electricCategoryContainer.innerHTML = ''; // 기존 내용 비우기
         
-        // 디젤-전기 세부 카테고리 정의
-        const electricCategories = [
-            'diesel_electric_equipment',
-            'diesel_electric_circuit'
-        ];
+        // **[수정]** 디젤-전기 세부 카테고리 대신 실제 데이터 키 하나만 사용
+        const electricCategories = ['diesel_electric'];
 
         // 문제 수 계산 및 화면에 표시
         electricCategories.forEach(key => {
@@ -163,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             div.className = 'flex items-center p-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50';
             div.innerHTML = `
                 <label class="flex items-center flex-1 cursor-pointer">
-                    <input type="checkbox" class="electric-category-check h-5 w-5 text-blue-600" value="${key}">
+                    <input type="checkbox" class="electric-category-check h-5 w-5 text-blue-600" value="${key}" checked>
                     <span class="ml-3 text-gray-700 font-medium">${displayName}</span>
                 </label>
                 <div class="text-right">
@@ -174,13 +172,9 @@ document.addEventListener('DOMContentLoaded', () => {
             electricCategoryContainer.appendChild(div);
         });
         
-        // 총 문제 수 합산
-        const totalCount = electricCategories.reduce((sum, key) => sum + (allQuestions[key] ? allQuestions[key].length : 0), 0);
-        const totalRemaining = electricCategories.reduce((sum, key) => {
-            const count = allQuestions[key] ? allQuestions[key].length : 0;
-            const currentProgress = sequentialProgress[key] || 0;
-            return sum + (count - currentProgress);
-        }, 0);
+        // 총 문제 수 합산 (실제 데이터 키로 계산)
+        const totalCount = allQuestions['diesel_electric'] ? allQuestions['diesel_electric'].length : 0;
+        const totalRemaining = totalCount - (sequentialProgress['diesel_electric'] || 0);
         
         const totalDiv = document.createElement('div');
         totalDiv.className = 'text-center p-3 bg-gray-100 rounded-lg font-bold text-gray-700';
@@ -195,29 +189,37 @@ document.addEventListener('DOMContentLoaded', () => {
         practicePool = [];
         currentPracticeCategories = [];
         practiceMode = mode; // 모드 저장
-
+        
+        const dataKey = 'diesel_electric'; // 실제 데이터 키
+        
         const selectedCategories = document.querySelectorAll('.electric-category-check:checked');
+        
+        // **[수정]** 선택된 카테고리를 'diesel_electric' 하나로 강제합니다.
         if (selectedCategories.length === 0) {
             alert('하나 이상의 세부 과목을 선택하세요.');
             return;
         }
+        
+        // 선택된 카테고리 중 유효한 키(여기서는 'diesel_electric'만)를 사용
+        const targetKeys = Array.from(selectedCategories).map(cb => cb.value).filter(key => allQuestions[key]);
+        
+        if(targetKeys.length === 0) {
+            alert('선택된 카테고리에 문제가 없습니다. 데이터를 확인해주세요.');
+            return;
+        }
+        
+        currentPracticeCategories = [dataKey]; // 풀이할 카테고리 리스트에 실제 데이터 키 저장
 
-        selectedCategories.forEach(cb => {
-            const key = cb.value;
-            if (allQuestions[key]) {
-                currentPracticeCategories.push(key); // 현재 풀이할 카테고리 저장
-                
-                if (mode === 'sequential') {
-                    // 순차 풀이: 현재 진행 인덱스부터 끝까지 풀에 추가
-                    const startIndex = sequentialProgress[key] || 0;
-                    const questions = allQuestions[key].slice(startIndex);
-                    practicePool = practicePool.concat(questions);
-                } else {
-                    // 랜덤 풀이: 전체 문제를 풀에 추가
-                    practicePool = practicePool.concat(allQuestions[key]);
-                }
-            }
-        });
+        if (mode === 'sequential') {
+            // 순차 풀이: 현재 진행 인덱스부터 끝까지 풀에 추가
+            const startIndex = sequentialProgress[dataKey] || 0;
+            const questions = (allQuestions[dataKey] || []).slice(startIndex);
+            practicePool = practicePool.concat(questions);
+            
+        } else {
+            // 랜덤 풀이: 전체 문제를 풀에 추가
+            practicePool = practicePool.concat(allQuestions[dataKey]);
+        }
 
         if (practicePool.length === 0) {
             alert(mode === 'sequential' ? '선택한 과목의 풀 문제가 없습니다. 문제를 모두 풀었거나 데이터가 없는지 확인하세요.' : '선택한 과목에 문제가 없습니다.');
@@ -242,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let targetCategories = [];
         if (isAll) {
             // 전체 모드: 모든 카테고리 포함 (단, 디젤-전기 세부는 제외하고 일반 카테고리만)
+            // **[수정]** 디젤-전기 전체 키인 'diesel_electric'를 포함합니다.
             targetCategories = Object.keys(allQuestions).filter(key => 
                 key !== 'diesel_electric_equipment' && key !== 'diesel_electric_circuit'
             );
@@ -324,8 +327,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (practiceMode === 'sequential') {
             const q = practicePool[currentQuestionIndex];
             
-            // 현재 풀고 있는 문제가 allQuestions의 몇 번째 문제인지 확인 (질문 텍스트로 찾기)
-            for (const key of Object.keys(sequentialProgress)) { // 전체 순차 카테고리를 대상으로 검사
+            // **[수정]** 모든 순차 풀이 카테고리 대신 'currentPracticeCategories' 내에서만 확인
+            for (const key of currentPracticeCategories) {
                 const categoryQuestions = allQuestions[key];
                 
                 // 해당 카테고리에 질문이 있는지 찾기
@@ -382,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.startTest = (testType) => {
         testQuestions = [];
-        const dieselCategories = ['diesel_engine', 'diesel_electric_equipment', 'diesel_electric_circuit', 'diesel_braking'];
+        // **[수정]** 디젤-전기 세부 카테고리 대신 디젤-전기 전체 키 사용
+        const dieselCategories = ['diesel_engine', 'diesel_electric', 'diesel_braking']; 
         const railCategories = ['rail_track', 'rail_signal', 'rail_catenary', 'rail_vehicle', 'rail_communication'];
 
         let requiredQuestions = 0;
