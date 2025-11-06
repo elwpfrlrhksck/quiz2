@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // 초기 실행 시 진행 상황 불러오기
-    localStorage.removeItem('quizProgress');
+    
     loadProgress();
     
     // ========================================================================
@@ -616,4 +616,5 @@ document.addEventListener('DOMContentLoaded', () => {
     goToMenu(); // 앱 시작 시 메뉴 화면 표시
 
 });
+
 
