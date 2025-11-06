@@ -45,7 +45,7 @@ const allQuestions = {
     ],
 
     /** 디젤 - 전기 */
-    "diesel_electric": [
+    "diesel_electric_equipment": [
     {
         "question": "디젤기관차의 동력전달 순서로 맞는 것은?",
         "options": [
@@ -2457,7 +2457,8 @@ const allQuestions = {
   }
      
     ],
-
+"diesel_electric_equipment": [
+ ],
     /** 디젤 - 제동 */
     "diesel_braking": [
         // <<< 여기에 [디젤-제동] 문제 객체들을 붙여넣으세요 >>>
@@ -13432,6 +13433,7 @@ const allQuestions = {
     }
     ]
 };
+
 
 
 
