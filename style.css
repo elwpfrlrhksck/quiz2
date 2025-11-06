@@ -2,36 +2,64 @@
 body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
     background-color: #f0f2f5;
+    /* 모바일에서 텍스트 크기 자동 조절 방지 */
+    -webkit-text-size-adjust: 100%;
 }
 /* 화면 전환 시 부드럽게 */
 .screen {
     transition: opacity 0.3s ease-in-out;
 }
+
+/* 퀴즈 옵션 버튼 기본 스타일 */
+.option-btn {
+    border: 1px solid #d1d5db; /* gray-300 */
+    padding: 0.75rem; /* p-3 */
+    border-radius: 0.5rem; /* rounded-lg */
+    text-align: left;
+    font-size: 0.9rem; /* text-sm */
+    line-height: 1.4;
+    background-color: white;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.option-btn:hover {
+    background-color: #f9fafb; /* gray-50 */
+}
+
 /* 정답/오답/선택 시각적 피드백 */
 .option-btn.correct {
     background-color: #d1fae5; /* green-100 */
     border-color: #10b981; /* green-500 */
     color: #065f46; /* green-800 */
+    font-weight: 600;
 }
 .option-btn.incorrect {
     background-color: #fee2e2; /* red-100 */
     border-color: #ef4444; /* red-500 */
     color: #991b1b; /* red-800 */
+    font-weight: 600;
 }
 .option-btn.selected {
     background-color: #dbeafe; /* blue-100 */
     border-color: #3b82f6; /* blue-500 */
+    font-weight: 600;
 }
 /* 버튼 비활성화 스타일 */
 .option-btn:disabled {
-    opacity: 0.7;
+    opacity: 0.8;
     cursor: not-allowed;
 }
+
 /* 해설 영역 */
 #explanation {
-    border-top: 2px solid #e5e7eb; /* gray-200 */
-    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb; /* gray-200 */
+    padding-top: 0.75rem;
     margin-top: 1rem;
+}
+
+/* 결과 보기 영역 */
+.result-options {
+    font-size: 0.875rem; /* text-sm */
+    line-height: 1.5;
 }
 
 /* Tailwind CSS가 로드되기 전이나 실패 시를 대비한 기본 숨김 처리 */
