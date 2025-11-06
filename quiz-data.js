@@ -2457,7 +2457,7 @@ const allQuestions = {
   }
      
     ],
-"diesel_electric_equipment": [
+"diesel_electric_circuit": [
  ],
     /** 디젤 - 제동 */
     "diesel_braking": [
@@ -13433,6 +13433,7 @@ const allQuestions = {
     }
     ]
 };
+
 
 
 
