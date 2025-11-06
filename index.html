@@ -3,46 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>객관식 퀴즈</title>
+    <title>철도 객관식 퀴즈</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- JavaScript Files -->
+    <!-- quiz-data.js가 script.js보다 먼저 로드되어야 합니다. -->
+    <script src="quiz-data.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div id="main-menu-screen" class="screen active">
-        <h1>퀴즈 카테고리</h1>
-        <div id="main-menu-container"></div>
-    </div>
+    <div class="w-full max-w-3xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+        <header class="p-6 bg-blue-600 text-white">
+            <h1 class="text-3xl font-bold text-center">철도 퀴즈 사이트</h1>
+        </header>
 
-    <div id="sub-menu-screen" class="screen">
-        <h1 id="sub-menu-title">서브 카테고리</h1>
-        <div id="sub-menu-container"></div>
-        <button class="btn-sub" id="btn-back-main">뒤로가기</button>
-    </div>
-
-    <div id="quiz-screen" class="screen">
-        <div id="quiz-header">
-            <span id="quiz-counter">1 / 10</span>
-            <span id="quiz-score">점수: 0</span>
-        </div>
-        
-        <p id="question-text">문제 로딩 중...</p>
-        <img id="question-image" src="" alt="문제 이미지">
-        
-        <div id="options-container">
+        <main class="p-6">
+            <!-- 1. 메뉴 화면 -->
+            <div id="menu-screen" class="screen">
+                <h2 class="text-2xl font-semibold text-center mb-8">모드를 선택하세요</h2>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="showPracticeSetup()" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors shadow-md">
+                        <span class="text-2xl block mb-1">📚</span>
+                        연습 모드
+                    </button>
+                    <button onclick="showTestSetup()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors shadow-md">
+                        <span class="text-2xl block mb-1">⏱️</span>
+                        시험 모드
+                    </button>
+                </div>
             </div>
 
-        <p id="explanation-text"></p> <button id="btn-next" class="btn-main hidden">다음 문제</button>
-        <button id="btn-back-to-menu-quiz" class="btn-sub">메뉴로</button>
-    </div>
+            <!-- 2. 연습 모드 설정 화면 -->
+            <div id="practice-setup-screen" class="screen hidden">
+                <h2 class="text-2xl font-semibold mb-6">연습할 과목을 선택하세요</h2>
+                <div class="space-y-4 mb-6">
+                    <fieldset>
+                        <legend class="text-lg font-medium mb-2">디젤 (3)</legend>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="diesel_engine">
+                                <span class="ml-3 text-gray-700">기관</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="diesel_electric">
+                                <span class="ml-3 text-gray-700">전기</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="diesel_braking">
+                                <span class="ml-3 text-gray-700">제동</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend class="text-lg font-medium mb-2">철도 시스템 (5)</legend>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="rail_track">
+                                <span class="ml-3 text-gray-700">선로</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="rail_signal">
+                                <span class="ml-3 text-gray-700">신호</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="rail_catenary">
+                                <span class="ml-3 text-gray-700">전차선</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="rail_vehicle">
+                                <span class="ml-3 text-gray-700">차량</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-5 w-5 text-blue-600" value="rail_communication">
+                                <span class="ml-3 text-gray-700">통신</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                    <button onclick="startPractice(false)" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">선택 과목 시작</button>
+                    <button onclick="startPractice(true)" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-lg transition-colors">전체 과목 시작</button>
+                </div>
+                <button onclick="goToMenu()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">메뉴로 돌아가기</button>
+            </div>
 
-    <div id="result-screen" class="screen">
-        <h1>퀴즈 결과</h1>
-        <p id="result-text">10 문제 중 8개를 맞혔습니다!</p>
-        <button id="btn-retry" class="btn-main">다시 풀기</button>
-        <button id="btn-back-to-menu-result" class="btn-sub">메인 메뉴로</button>
-    </div>
+            <!-- 3. 시험 모드 설정 화면 -->
+            <div id="test-setup-screen" class="screen hidden">
+                <h2 class="text-2xl font-semibold text-center mb-8">시험 종류를 선택하세요</h2>
+                <div class="flex flex-col gap-4 mb-4">
+                    <button onclick="startTest('diesel')" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors shadow-md">디젤 기관 시험 (40 문제)</button>
+                    <button onclick="startTest('rail')" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors shadow-md">철도 시스템 시험 (20 문제)</button>
+                    <button onclick="startTest('full')" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors shadow-md">전체 시험 (60 문제)</button>
+                </div>
+                <button onclick="goToMenu()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">메뉴로 돌아가기</button>
+            </div>
 
-    <script src="quiz-data.js"></script> 
-    <script src="script.js"></script>
+            <!-- 4. 퀴즈 진행 화면 (연습/시험 공용) -->
+            <div id="quiz-screen" class="screen hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="quiz-title" class="text-xl font-semibold"></h2>
+                    <span id="progress-tracker" class="text-lg font-medium text-gray-600"></span>
+                </div>
+                
+                <div class="mb-6 p-4 border rounded-lg bg-gray-50 min-h-[100px]">
+                    <p id="question-text" class="text-lg text-gray-900"></p>
+                </div>
+                
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- JS로 옵션 버튼 생성 -->
+                </div>
+
+                <!-- 연습 모드용 피드백 -->
+                <div id="practice-feedback" class="hidden mt-6">
+                    <div id="feedback-message" class="text-2xl font-bold mb-4"></div>
+                    <div id="explanation" class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2 text-yellow-800">해설</h4>
+                        <p id="explanation-text" class="text-gray-700"></p>
+                    </div>
+                </div>
+
+                <!-- 네비게이션 버튼 -->
+                <div id="navigation-container" class="flex justify-between mt-8">
+                    <!-- 시험 모드용 -->
+                    <button id="prev-btn" onclick="navigateTest(-1)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg transition-colors hidden">이전</button>
+                    <button id="next-btn" onclick="navigateTest(1)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-colors hidden">다음</button>
+                    <button id="submit-btn" onclick="submitTest()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-colors hidden">제출</button>
+
+                    <!-- 연습 모드용 -->
+                    <button id="next-practice-btn" onclick="nextPracticeQuestion()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-colors hidden w-full">다음 문제</button>
+                </div>
+                 <button id="quit-btn" onclick="goToMenu()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors mt-4">메뉴로 돌아가기</button>
+            </div>
+
+            <!-- 5. 시험 결과 화면 -->
+            <div id="results-screen" class="screen hidden">
+                <h2 class="text-3xl font-bold text-center mb-4">시험 결과</h2>
+                <div class="text-center p-6 bg-blue-50 rounded-lg mb-8">
+                    <p class="text-lg text-gray-700">총 점수</p>
+                    <p id="score-display" class="text-6xl font-extrabold text-blue-600"></p>
+                    <p id="percentage-display" class="text-2xl font-medium text-gray-600"></p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <button onclick="showResults('all')" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">전체 문제 확인</button>
+                    <button onclick="showResults('incorrect')" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">틀린 문제 확인</button>
+                </div>
+                
+                <button onclick="goToMenu()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">메뉴로 돌아가기</button>
+            
+                <div id="results-display-container" class="mt-8 space-y-6">
+                    <!-- JS로 결과 항목 생성 -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
 </body>
 </html>
