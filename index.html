@@ -84,33 +84,21 @@
                         </div>
                     </fieldset>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4 mb-4">
-                    <button onclick="startPractice(false)" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">선택 과목 시작</button>
-                    <button onclick="startPractice(true)" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">전체 과목 시작</button>
+                
+                <div class="space-y-3 mb-4">
+                    <p class="text-sm font-medium text-gray-600 text-center">- 랜덤 모드 (문제 순서 섞기) -</p>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="startPracticeRandom(false)" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">🔀 선택 과목 (랜덤)</button>
+                        <button onclick="startPracticeRandom(true)" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">🔀 전체 과목 (랜덤)</button>
+                    </div>
+                    <p class="text-sm font-medium text-gray-600 text-center pt-2">- 순서대로 풀기 (이어서 풀기) -</p>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="startPracticeSequential(false)" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">▶️ 선택 과목 (순서대로)</button>
+                        <button onclick="startPracticeSequential(true)" class="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">▶️ 전체 과목 (순서대로)</button>
+                    </div>
                 </div>
                 <button onclick="goToMenu()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">메뉴로 돌아가기</button>
             </div>
-
-            <div id="electric-setup-screen" class="screen hidden">
-                <h2 class="text-xl font-semibold mb-4 text-center">디젤 - 전기 세부 과목 선택</h2>
-                <div id="electric-category-container" class="space-y-3 mb-4">
-                    </div>
-                
-                <div class="space-y-3 mb-4">
-                    <div class="flex gap-3">
-                        <button onclick="alert('이 기능은 현재 사용되지 않습니다. 일반 연습모드에서 과목을 선택해주세요.');" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-5 rounded-lg text-sm sm:text-base transition-colors shadow-md">
-                            <span class="text-lg block mb-1">▶️</span>
-                            순서대로 풀기 (이어서)
-                        </button>
-                        <button onclick="alert('이 기능은 현재 사용되지 않습니다. 일반 연습모드에서 과목을 선택해주세요.');" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-5 rounded-lg text-sm sm:text-base transition-colors shadow-md">
-                            <span class="text-lg block mb-1">🔀</span>
-                            랜덤으로 풀기
-                        </button>
-                    </div>
-                </div>
-                <button onclick="showPracticeSetup()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">이전 화면으로</button>
-            </div>
-
 
             <div id="test-setup-screen" class="screen hidden">
                 <h2 class="text-xl font-semibold text-center mb-6">시험 종류를 선택하세요</h2>
