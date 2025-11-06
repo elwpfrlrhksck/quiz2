@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // (1) 로컬 스토리지 관리 함수 (진행 상황 저장 및 불러오기)
     // ========================================================================
     // 순차 풀이 진행 상황 저장 (카테고리 키: 인덱스)
-    // **[복원 및 수정]** 세부 카테고리 키를 다시 사용합니다.
     let sequentialProgress = {
         'diesel_engine': 0,
         'diesel_electric_equipment': 0, // NEW: 전기장치
@@ -40,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // 초기 실행 시 진행 상황 불러오기
-    
     loadProgress();
     
     // ========================================================================
@@ -58,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPracticeCategories = []; // 현재 풀이 중인 카테고리 배열 (순차 풀이 시 사용)
 
     // 카테고리 이름 매핑 (NEW: 세부 카테고리 추가)
-    // **[복원]** 세부 카테고리 이름을 다시 사용합니다.
     const categoryNames = {
         'diesel_engine': '디젤-기관',
         'diesel_electric_equipment': '디젤-전기-장치',
@@ -144,12 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('practice-setup-screen');
     }
     
-    // NEW: 디젤-전기 세부 설정 화면 표시 및 구성
+    // NEW: 디젤-전기 세부 설정 화면 표시 및 구성 (index.html 수정으로 사용되지 않을 예정)
     window.showElectricSetup = () => {
         currentMode = 'practice_setup';
         electricCategoryContainer.innerHTML = ''; // 기존 내용 비우기
         
-        // 디젤-전기 세부 카테고리 정의 (HTML 체크박스에 있던 원래 키 사용)
+        // 디젤-전기 세부 카테고리 정의
         const electricCategories = [
             'diesel_electric_equipment',
             'diesel_electric_circuit'
@@ -167,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             totalCount += count;
             totalRemaining += remainingCount;
-            
+
             const div = document.createElement('div');
             div.className = 'flex items-center p-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50';
             div.innerHTML = `
@@ -183,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             electricCategoryContainer.appendChild(div);
         });
         
-        // 총 문제 수 합산 표시
+        // 총 문제 수 합산
         const totalDiv = document.createElement('div');
         totalDiv.className = 'text-center p-3 bg-gray-100 rounded-lg font-bold text-gray-700';
         totalDiv.innerHTML = `총 문제 수: ${totalCount} 문제 (전체 ${totalRemaining} 문제 남음)`;
@@ -192,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('electric-setup-screen');
     }
     
-    // NEW: 디젤-전기 세부 연습 시작 함수
+    // NEW: 디젤-전기 세부 연습 시작 함수 (index.html 수정으로 사용되지 않을 예정)
     window.startPracticeForElectric = (isAll, mode) => {
         practicePool = [];
         currentPracticeCategories = [];
@@ -205,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         selectedCategories.forEach(cb => {
-            const key = cb.value; // 'diesel_electric_equipment' 또는 'diesel_electric_circuit'
+            const key = cb.value;
             if (allQuestions[key]) {
                 currentPracticeCategories.push(key); // 현재 풀이할 카테고리 저장
                 
@@ -243,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let targetCategories = [];
         if (isAll) {
-            // 전체 모드: 모든 카테고리 포함 
+            // **[수정]** 전체 모드: allQuestions 객체의 모든 키를 포함합니다.
             targetCategories = Object.keys(allQuestions);
         } else {
             // 선택 모드: 체크된 카테고리의 문제만 추가
@@ -256,8 +253,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         targetCategories.forEach(key => {
-            // **[수정]** allQuestions에 해당 키가 있는지 확인
-            if (allQuestions.hasOwnProperty(key) && allQuestions[key]) {
+            if (allQuestions[key]) {
+                currentPracticeCategories.push(key); // 현재 풀이할 카테고리 저장 (순차 진행 저장을 위해 추가)
                 practicePool = practicePool.concat(allQuestions[key]);
             }
         });
@@ -326,8 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const q = practicePool[currentQuestionIndex];
             
             // 현재 풀고 있는 문제가 allQuestions의 몇 번째 문제인지 확인 (질문 텍스트로 찾기)
-            // **[수정]** 현재 풀이 중인 카테고리(currentPracticeCategories)만 검사합니다.
-            for (const key of currentPracticeCategories) { 
+            for (const key of currentPracticeCategories) { // 현재 풀이 중인 카테고리만 검사
                 const categoryQuestions = allQuestions[key];
                 
                 // 해당 카테고리에 질문이 있는지 찾기
@@ -384,7 +380,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.startTest = (testType) => {
         testQuestions = [];
-        // **[수정]** 디젤-전기 세부 카테고리를 다시 사용합니다.
         const dieselCategories = ['diesel_engine', 'diesel_electric_equipment', 'diesel_electric_circuit', 'diesel_braking'];
         const railCategories = ['rail_track', 'rail_signal', 'rail_catenary', 'rail_vehicle', 'rail_communication'];
 
@@ -616,5 +611,3 @@ document.addEventListener('DOMContentLoaded', () => {
     goToMenu(); // 앱 시작 시 메뉴 화면 표시
 
 });
-
-
