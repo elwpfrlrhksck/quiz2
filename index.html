@@ -43,10 +43,15 @@
                                 <span class="ml-2 text-gray-700 text-sm">기관</span>
                             </label>
                             
-                            <button onclick="showElectricSetup()" class="flex items-center justify-center p-2 border rounded-lg hover:bg-blue-100/50 cursor-pointer text-sm font-semibold text-blue-800 transition-colors shadow-sm">
-                                전기 (세부 선택)
-                            </button>
-                            
+                            <label class="flex items-center p-2 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-4 w-4 text-blue-600" value="diesel_electric_equipment">
+                                <span class="ml-2 text-gray-700 text-sm">전기-장치</span>
+                            </label>
+
+                            <label class="flex items-center p-2 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" class="category-check h-4 w-4 text-blue-600" value="diesel_electric_circuit">
+                                <span class="ml-2 text-gray-700 text-sm">전기-회로</span>
+                            </label>
                             <label class="flex items-center p-2 border rounded-lg hover:bg-gray-50 cursor-pointer">
                                 <input type="checkbox" class="category-check h-4 w-4 text-blue-600" value="diesel_braking">
                                 <span class="ml-2 text-gray-700 text-sm">제동</span>
@@ -93,11 +98,11 @@
                 
                 <div class="space-y-3 mb-4">
                     <div class="flex gap-3">
-                        <button onclick="startPracticeForElectric(false, 'sequential')" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-5 rounded-lg text-sm sm:text-base transition-colors shadow-md">
+                        <button onclick="alert('이 기능은 현재 사용되지 않습니다. 일반 연습모드에서 과목을 선택해주세요.');" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-5 rounded-lg text-sm sm:text-base transition-colors shadow-md">
                             <span class="text-lg block mb-1">▶️</span>
                             순서대로 풀기 (이어서)
                         </button>
-                        <button onclick="startPracticeForElectric(false, 'random')" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-5 rounded-lg text-sm sm:text-base transition-colors shadow-md">
+                        <button onclick="alert('이 기능은 현재 사용되지 않습니다. 일반 연습모드에서 과목을 선택해주세요.');" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-5 rounded-lg text-sm sm:text-base transition-colors shadow-md">
                             <span class="text-lg block mb-1">🔀</span>
                             랜덤으로 풀기
                         </button>
