@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 순차 풀이 진행 상황 저장 (카테고리 키: 인덱스)
     let sequentialProgress = {
         'diesel_engine': 0,
-        'diesel_electric_equipment': 0, // NEW: 전기장치
-        'diesel_electric_circuit': 0,     // NEW: 전기회로
+        'diesel_electric_equipment': 0,
+        'diesel_electric_circuit': 0,
         'diesel_braking': 0,
         'rail_track': 0,
         'rail_signal': 0,
@@ -51,11 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentQuestionIndex = 0;
     let score = 0;
     
-    // NEW: 풀이 모드 및 현재 풀이 카테고리 관리
+    // 풀이 모드 및 현재 풀이 카테고리 관리
     let practiceMode = 'random'; // random, sequential
     let currentPracticeCategories = []; // 현재 풀이 중인 카테고리 배열 (순차 풀이 시 사용)
 
-    // 카테고리 이름 매핑 (NEW: 세부 카테고리 추가)
+    // 카테고리 이름 매핑
     const categoryNames = {
         'diesel_engine': '디젤-기관',
         'diesel_electric_equipment': '디젤-전기-장치',
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuScreen = document.getElementById('menu-screen');
     const practiceSetupScreen = document.getElementById('practice-setup-screen');
     const testSetupScreen = document.getElementById('test-setup-screen');
-    const electricSetupScreen = document.getElementById('electric-setup-screen'); // NEW
-    const electricCategoryContainer = document.getElementById('electric-category-container'); // NEW
+    // const electricSetupScreen = document.getElementById('electric-setup-screen'); // 삭제됨
+    // const electricCategoryContainer = document.getElementById('electric-category-container'); // 삭제됨
     const quizScreen = document.getElementById('quiz-screen');
     const resultsScreen = document.getElementById('results-screen');
     
@@ -141,109 +141,23 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('practice-setup-screen');
     }
     
-    // NEW: 디젤-전기 세부 설정 화면 표시 및 구성 (index.html 수정으로 사용되지 않을 예정)
-    window.showElectricSetup = () => {
-        currentMode = 'practice_setup';
-        electricCategoryContainer.innerHTML = ''; // 기존 내용 비우기
-        
-        // 디젤-전기 세부 카테고리 정의
-        const electricCategories = [
-            'diesel_electric_equipment',
-            'diesel_electric_circuit'
-        ];
+    // ===== 삭제된 함수 =====
+    // window.showElectricSetup = () => { ... }
+    // window.startPracticeForElectric = (isAll, mode) => { ... }
+    // ======================
 
-        // 문제 수 계산 및 화면에 표시
-        let totalCount = 0;
-        let totalRemaining = 0;
-
-        electricCategories.forEach(key => {
-            const count = allQuestions[key] ? allQuestions[key].length : 0;
-            const displayName = categoryNames[key];
-            const currentProgress = sequentialProgress[key] || 0;
-            const remainingCount = count - currentProgress;
-            
-            totalCount += count;
-            totalRemaining += remainingCount;
-
-            const div = document.createElement('div');
-            div.className = 'flex items-center p-2 border rounded-lg bg-white shadow-sm hover:bg-gray-50';
-            div.innerHTML = `
-                <label class="flex items-center flex-1 cursor-pointer">
-                    <input type="checkbox" class="electric-category-check h-5 w-5 text-blue-600" value="${key}">
-                    <span class="ml-3 text-gray-700 font-medium">${displayName}</span>
-                </label>
-                <div class="text-right">
-                    <span class="text-xs text-gray-400 block">${currentProgress} / ${count} 문제 풀이 완료</span>
-                    <span class="text-base font-semibold text-gray-700">${remainingCount} 문제 남음</span>
-                </div>
-            `;
-            electricCategoryContainer.appendChild(div);
-        });
-        
-        // 총 문제 수 합산
-        const totalDiv = document.createElement('div');
-        totalDiv.className = 'text-center p-3 bg-gray-100 rounded-lg font-bold text-gray-700';
-        totalDiv.innerHTML = `총 문제 수: ${totalCount} 문제 (전체 ${totalRemaining} 문제 남음)`;
-        electricCategoryContainer.appendChild(totalDiv);
-
-        showScreen('electric-setup-screen');
-    }
-    
-    // NEW: 디젤-전기 세부 연습 시작 함수 (index.html 수정으로 사용되지 않을 예정)
-    window.startPracticeForElectric = (isAll, mode) => {
+    /**
+     * [수정] 랜덤 연습 모드 시작 (기존 startPractice 함수)
+     */
+    window.startPracticeRandom = (isAll) => {
         practicePool = [];
         currentPracticeCategories = [];
-        practiceMode = mode; // 모드 저장
-
-        const selectedCategories = document.querySelectorAll('.electric-category-check:checked');
-        if (selectedCategories.length === 0) {
-            alert('하나 이상의 세부 과목을 선택하세요.');
-            return;
-        }
-
-        selectedCategories.forEach(cb => {
-            const key = cb.value;
-            if (allQuestions[key]) {
-                currentPracticeCategories.push(key); // 현재 풀이할 카테고리 저장
-                
-                if (mode === 'sequential') {
-                    // 순차 풀이: 현재 진행 인덱스부터 끝까지 풀에 추가
-                    const startIndex = sequentialProgress[key] || 0;
-                    const questions = allQuestions[key].slice(startIndex);
-                    practicePool = practicePool.concat(questions);
-                } else {
-                    // 랜덤 풀이: 전체 문제를 풀에 추가
-                    practicePool = practicePool.concat(allQuestions[key]);
-                }
-            }
-        });
-
-        if (practicePool.length === 0) {
-            alert(mode === 'sequential' ? '선택한 과목의 풀 문제가 없습니다. 문제를 모두 풀었거나 데이터가 없는지 확인하세요.' : '선택한 과목에 문제가 없습니다.');
-            return;
-        }
-
-        currentMode = 'practice_run';
-        if (mode === 'random') {
-            shuffleArray(practicePool); // 랜덤 모드일 때만 섞기
-        }
-        currentQuestionIndex = 0; // 연습 풀이 시작은 항상 0번 인덱스
-        setupQuizScreen('practice', mode); // 모드 정보 추가
-        loadPracticeQuestion();
-        showScreen('quiz-screen');
-    }
-
-    window.startPractice = (isAll) => {
-        practicePool = [];
-        currentPracticeCategories = [];
-        practiceMode = 'random'; // 일반 연습 모드는 랜덤 고정
+        practiceMode = 'random'; // 랜덤 모드 설정
 
         let targetCategories = [];
         if (isAll) {
-            // **[수정]** 전체 모드: allQuestions 객체의 모든 키를 포함합니다.
             targetCategories = Object.keys(allQuestions);
         } else {
-            // 선택 모드: 체크된 카테고리의 문제만 추가
             const selectedChecks = document.querySelectorAll('.category-check:checked');
             if (selectedChecks.length === 0) {
                 alert('하나 이상의 과목을 선택하세요.');
@@ -254,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         targetCategories.forEach(key => {
             if (allQuestions[key]) {
-                currentPracticeCategories.push(key); // 현재 풀이할 카테고리 저장 (순차 진행 저장을 위해 추가)
+                // currentPracticeCategories.push(key); // 랜덤 모드는 카테고리 추적 불필요
                 practicePool = practicePool.concat(allQuestions[key]);
             }
         });
@@ -267,10 +181,59 @@ document.addEventListener('DOMContentLoaded', () => {
         currentMode = 'practice_run';
         shuffleArray(practicePool); // 문제 풀 섞기
         currentQuestionIndex = 0;
-        setupQuizScreen('practice');
+        setupQuizScreen('practice', 'random'); // 랜덤 모드로 설정
         loadPracticeQuestion();
         showScreen('quiz-screen');
     }
+
+    /**
+     * [신규] 순서대로 풀기 (이어서 풀기) 모드 시작
+     */
+    window.startPracticeSequential = (isAll) => {
+        practicePool = [];
+        currentPracticeCategories = [];
+        practiceMode = 'sequential'; // 순차 모드 설정
+
+        let targetCategories = [];
+        if (isAll) {
+            targetCategories = Object.keys(allQuestions);
+        } else {
+            const selectedChecks = document.querySelectorAll('.category-check:checked');
+            if (selectedChecks.length === 0) {
+                alert('하나 이상의 과목을 선택하세요.');
+                return;
+            }
+            targetCategories = Array.from(selectedChecks).map(cb => cb.value);
+        }
+
+        // 선택한 카테고리 저장 (진행상황 업데이트 시 필요)
+        currentPracticeCategories = targetCategories; 
+
+        targetCategories.forEach(key => {
+            if (allQuestions[key]) {
+                const startIndex = sequentialProgress[key] || 0; // 저장된 진행상황 로드
+                
+                if (allQuestions[key].length > startIndex) {
+                    // 풀지 않은 문제가 남아있으면
+                    const questions = allQuestions[key].slice(startIndex); // startIndex부터 끝까지 문제 추출
+                    practicePool = practicePool.concat(questions); // 순서대로 추가
+                }
+            }
+        });
+
+        if (practicePool.length === 0) {
+            alert('선택한 과목의 문제를 모두 풀었습니다! (또는 문제가 없습니다)');
+            return;
+        }
+
+        currentMode = 'practice_run';
+        // ★ 순차 모드이므로 shuffleArray(practicePool)를 호출하지 않음 ★
+        currentQuestionIndex = 0;
+        setupQuizScreen('practice', 'sequential'); // 순차 모드로 설정
+        loadPracticeQuestion();
+        showScreen('quiz-screen');
+    }
+
 
     function loadPracticeQuestion() {
         // 피드백/해설 숨기기 및 버튼 활성화
@@ -280,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const q = practicePool[currentQuestionIndex];
         
-        // NEW: 순차 풀이일 때 진행 상황 표시
+        // [기존 로직] 순차 풀이일 때 진행 상황 표시 (수정 불필요)
         if (practiceMode === 'sequential') {
              // 순차 모드는 현재 풀의 문제 수가 전체 남은 문제 수임
              const totalRemaining = practicePool.length;
@@ -292,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         optionsContainer.innerHTML = ''; // 기존 옵션 삭제
 
-        // NEW: 옵션에 인덱스 정보 추가 (순차 풀이 역추적용)
+        // [기존 로직] 옵션에 인덱스 정보 추가 (수정 불필요)
         q.options.forEach((option, index) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn border border-gray-300 p-4 rounded-lg text-left text-lg hover:bg-gray-100 transition-colors';
@@ -318,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             optionButtons[correctIndex].classList.add('correct'); // 정답 표시
         }
         
-        // NEW: 순차 풀이일 경우에만 진행 상황 업데이트 (정답/오답과 무관하게)
+        // [기존 로직] 순차 풀이일 경우에만 진행 상황 업데이트 (수정 불필요)
         if (practiceMode === 'sequential') {
             const q = practicePool[currentQuestionIndex];
             
@@ -332,9 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (foundIndex !== -1) {
                         // 현재 인덱스(foundIndex + 1)가 저장된 진행 인덱스보다 크면 업데이트
+                        // (이미 푼 문제를 다시 푸는 경우, 진행도가 뒤로가면 안됨)
                         if (foundIndex + 1 > (sequentialProgress[key] || 0)) {
                              sequentialProgress[key] = foundIndex + 1; // 다음 문제의 인덱스 저장
-                             saveProgress(); // 저장
+                             saveProgress(); // 로컬 스토리지에 저장
                         }
                         break;
                     }
@@ -354,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.nextPracticeQuestion = () => {
         currentQuestionIndex++;
         
+        // [기존 로직] 순차/랜덤 모드별 분기 처리 (수정 불필요)
         if (currentQuestionIndex >= practicePool.length) {
             // 순차 풀이 모드 종료
             if (practiceMode === 'sequential') {
@@ -371,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ========================================================================
-    // (5) 핵심 로직: 시험 모드
+    // (5) 핵심 로직: 시험 모드 (수정 없음)
     // ========================================================================
     window.showTestSetup = () => {
         currentMode = 'test_setup';
@@ -397,12 +362,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const railQs = getShuffledQuestions(railCategories, 20);
             testQuestions = dieselQs.concat(railQs);
             
-            // 전체 문제 수가 부족할 경우를 대비
             if(testQuestions.length < requiredQuestions) {
                  console.warn(`전체 시험 문제 수 부족. (요청: 60, 가능: ${testQuestions.length})`);
                  requiredQuestions = testQuestions.length;
             }
-            shuffleArray(testQuestions); // 두 시험 합쳐서 다시 섞기
+            shuffleArray(testQuestions);
         }
 
         if (testQuestions.length === 0) {
@@ -415,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         currentMode = 'test_run';
-        userAnswers = new Array(testQuestions.length).fill(-1); // -1은 미선택
+        userAnswers = new Array(testQuestions.length).fill(-1);
         currentQuestionIndex = 0;
         score = 0;
         setupQuizScreen('test');
@@ -424,14 +388,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function loadTestQuestion() {
-        // 진행 상황 업데이트
         progressTracker.innerText = `${currentQuestionIndex + 1} / ${testQuestions.length}`;
-        
         const q = testQuestions[currentQuestionIndex];
         questionText.innerText = q.question;
-
-        optionsContainer.innerHTML = ''; // 기존 옵션 삭제
-        
+        optionsContainer.innerHTML = '';
         const savedAnswer = userAnswers[currentQuestionIndex];
 
         q.options.forEach((option, index) => {
@@ -439,14 +399,10 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.className = 'option-btn border border-gray-300 p-4 rounded-lg text-left text-lg hover:bg-gray-100 transition-colors';
             btn.innerHTML = `<span class="font-medium mr-2">${index + 1}.</span> ${option}`;
             btn.onclick = () => selectTestAnswer(index);
-            
-            if(index === savedAnswer) {
-                btn.classList.add('selected'); // 이전에 선택한 답안 표시
-            }
+            if(index === savedAnswer) btn.classList.add('selected');
             optionsContainer.appendChild(btn);
         });
 
-        // 네비게이션 버튼 상태 업데이트
         prevBtn.disabled = (currentQuestionIndex === 0);
         nextBtn.classList.toggle('hidden', currentQuestionIndex === testQuestions.length - 1);
         submitBtn.classList.toggle('hidden', currentQuestionIndex !== testQuestions.length - 1);
@@ -454,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.selectTestAnswer = (selectedIndex) => {
         userAnswers[currentQuestionIndex] = selectedIndex;
-        // 시각적 피드백
         const optionButtons = optionsContainer.querySelectorAll('.option-btn');
         optionButtons.forEach((btn, index) => {
             btn.classList.toggle('selected', index === selectedIndex);
@@ -463,15 +418,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.navigateTest = (direction) => {
         currentQuestionIndex += direction;
-        // 인덱스 범위 체크 (필요시)
         if (currentQuestionIndex < 0) currentQuestionIndex = 0;
         if (currentQuestionIndex >= testQuestions.length) currentQuestionIndex = testQuestions.length - 1;
-        
         loadTestQuestion();
     }
 
     window.submitTest = () => {
-        // 모든 문제를 풀었는지 확인
         const unanwsered = userAnswers.indexOf(-1);
         if (unanwsered !== -1) {
             if (!confirm(`아직 풀지 않은 문제(${unanwsered + 1}번)가 있습니다. 그대로 제출하시겠습니까?`)) {
@@ -481,7 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // 채점
         score = 0;
         for(let i = 0; i < testQuestions.length; i++) {
             if(userAnswers[i] === testQuestions[i].answer) {
@@ -494,23 +445,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const percentage = (score / testQuestions.length * 100).toFixed(1);
         percentageDisplay.innerText = `(${percentage}%)`;
         
-        // 결과 리뷰 컨테이너 비우기
         resultsDisplayContainer.innerHTML = '';
         showScreen('results-screen');
     }
 
     // ========================================================================
-    // (6) 핵심 로직: 결과 보기
+    // (6) 핵심 로직: 결과 보기 (수정 없음)
     // ========================================================================
     window.showResults = (filter) => {
-        resultsDisplayContainer.innerHTML = ''; // 비우기
+        resultsDisplayContainer.innerHTML = '';
 
         testQuestions.forEach((q, index) => {
             const userAnswer = userAnswers[index];
             const isCorrect = (userAnswer === q.answer);
 
             if (filter === 'incorrect' && isCorrect) {
-                return; // 틀린 문제 보기 모드인데 정답이면 건너뜀
+                return;
             }
 
             const resultDiv = document.createElement('div');
@@ -546,13 +496,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ========================================================================
-    // (7) 유틸리티 함수
+    // (7) 유틸리티 함수 (수정 없음)
     // ========================================================================
     
     /** 퀴즈 화면 UI를 모드에 맞게 설정 */
     function setupQuizScreen(mode, practiceMode = 'random') {
         if (mode === 'practice') {
-            // NEW: practiceMode에 따라 제목 변경
+            // [기존 로직] practiceMode에 따라 제목 변경 (수정 불필요)
             if (practiceMode === 'sequential') {
                 quizTitle.innerText = '연속 풀이 모드 (순서대로)';
             } else {
@@ -560,8 +510,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             progressTracker.classList.add('hidden');
-            practiceFeedback.classList.add('hidden'); // 시작 시 숨김
-            nextPracticeBtn.classList.add('hidden'); // 시작 시 숨김
+            practiceFeedback.classList.add('hidden');
+ab-send-feedback-large-icon
+            nextPracticeBtn.classList.add('hidden');
             prevBtn.classList.add('hidden');
             nextBtn.classList.add('hidden');
             submitBtn.classList.add('hidden');
@@ -569,8 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else { // test
             quizTitle.innerText = '시험 모드';
             progressTracker.classList.remove('hidden');
-            practiceFeedback.classList.add('hidden'); // 시험 중엔 항상 숨김
-            nextPracticeBtn.classList.add('hidden'); // 시험 중엔 항상 숨김
+            practiceFeedback.classList.add('hidden');
+            nextPracticeBtn.classList.add('hidden');
             prevBtn.classList.remove('hidden');
             nextBtn.classList.remove('hidden');
             submitBtn.classList.remove('hidden');
@@ -598,7 +549,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         shuffleArray(pool);
         
-        // 문제가 부족할 경우, 있는 만큼만 반환
         if (pool.length < count) {
             console.warn(`요청된 문제 수(${count})보다 풀의 문제 수(${pool.length})가 적습니다.`);
         }
