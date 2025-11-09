@@ -1,6 +1,3 @@
-// (수정) DOMContentLoaded 래퍼를 제거하여 모든 변수와 함수가 올바른 스코프를 갖도록 수정
-// DOM이 로드된 후 스크립트 실행 (defer 속성으로 인해 이미 보장됨)
-
 // ========================================================================
 // (1) 로컬 스토리지 관리 함수 (진행 상황 저장 및 불러오기)
 // ========================================================================
@@ -180,6 +177,7 @@ window.startPracticeRandom = (isAll) => {
 
 /**
  * 순서대로 풀기 (이어서 풀기) 모드 시작
+ * (수정): 문제를 다 푼 카테고리의 경우, 진행 상황을 0으로 리셋하고 처음부터 다시 풀도록 로직 변경
  */
 window.startPracticeSequential = (isAll) => {
     practicePool = [];
@@ -202,19 +200,27 @@ window.startPracticeSequential = (isAll) => {
     currentPracticeCategories = targetCategories;
 
     targetCategories.forEach(key => {
-        if (allQuestions[key]) {
-            const startIndex = sequentialProgress[key] || 0; // 저장된 진행상황 로드
+        if (allQuestions[key] && allQuestions[key].length > 0) {
+            let startIndex = sequentialProgress[key] || 0; // 저장된 진행상황 로드
             
-            if (allQuestions[key].length > startIndex) {
-                // 풀지 않은 문제가 남아있으면
-                const questions = allQuestions[key].slice(startIndex); // startIndex부터 끝까지 문제 추출
-                practicePool = practicePool.concat(questions); // 순서대로 추가
+            // (수정) 만약 저장된 진행 상황이 총 문제 수와 같거나 크다면 (즉, 다 풀었다면)
+            if (startIndex >= allQuestions[key].length) {
+                startIndex = 0; // 처음부터 다시 시작
+                sequentialProgress[key] = 0; // 진행 상황도 0으로 리셋
             }
+            
+            // startIndex부터 끝까지 문제 추출
+            const questions = allQuestions[key].slice(startIndex); 
+            practicePool = practicePool.concat(questions); // 순서대로 추가
         }
     });
 
+    // (수정) 리셋된 진행 상황이 있을 수 있으므로 여기서 저장
+    saveProgress();
+
     if (practicePool.length === 0) {
-        alert('선택한 과목의 문제를 모두 풀었습니다! (또는 문제가 없습니다)');
+        // (수정) 문제를 다 푼 경우가 아니라, 정말 문제가 없는 경우의 메시지로 변경
+        alert('선택한 과목에 문제가 없습니다. (데이터를 확인해주세요)');
         return;
     }
 
@@ -301,16 +307,21 @@ function checkPracticeAnswer(selectedIndex, correctIndex) {
     nextPracticeBtn.classList.remove('hidden');
 }
 
+/**
+ * (수정) 순차 풀이 시, 마지막 문제에서 메뉴로 돌아가도록 메시지 수정
+ */
 window.nextPracticeQuestion = () => {
     currentQuestionIndex++;
     
     if (currentQuestionIndex >= practicePool.length) {
         if (practiceMode === 'sequential') {
-            alert('선택한 과목의 문제를 모두 풀었습니다! 메뉴로 돌아갑니다.');
-            goToMenu();
+            // (수정) 메시지를 좀 더 명확하게 변경
+            alert('이번 세션의 모든 문제를 풀었습니다. 메뉴로 돌아갑니다.');
+            goToMenu(); // goToMenu()가 내부적으로 saveProgress()를 호출하여 완료된 상태를 저장합니다.
             return;
         }
         
+        // (랜덤 모드 로직)
         shuffleArray(practicePool);
         currentQuestionIndex = 0;
         alert('모든 문제를 다 풀었습니다. 다시 랜덤으로 시작합니다.');
