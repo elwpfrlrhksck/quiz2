@@ -264,6 +264,9 @@ function loadPracticeQuestion() {
         btn.onclick = () => checkPracticeAnswer(index, q.answer);
         optionsContainer.appendChild(btn);
     });
+
+    // (수정) 이전 버튼 활성화/비활성화
+    prevBtn.disabled = (currentQuestionIndex === 0);
 }
 
 function checkPracticeAnswer(selectedIndex, correctIndex) {
@@ -271,7 +274,7 @@ function checkPracticeAnswer(selectedIndex, correctIndex) {
     if (!practiceFeedback.classList.contains('hidden')) {
         return;
     }
-    
+
     const optionButtons = optionsContainer.querySelectorAll('.option-btn');
     optionButtons.forEach(btn => btn.disabled = true); // 버튼 비활성화
 
@@ -419,11 +422,24 @@ window.selectTestAnswer = (selectedIndex) => {
     });
 }
 
-window.navigateTest = (direction) => {
-    currentQuestionIndex += direction;
-    if (currentQuestionIndex < 0) currentQuestionIndex = 0;
-    if (currentQuestionIndex >= testQuestions.length) currentQuestionIndex = testQuestions.length - 1;
-    loadTestQuestion();
+/**
+ * (수정) 함수명을 navigateTest -> navigateQuiz로 변경
+ * (수정) 연습 모드(practice_run)일 때 이전 버튼(-1) 로직 추가
+ */
+window.navigateQuiz = (direction) => {
+    if (currentMode === 'test_run') {
+        // --- 시험 모드 로직 ---
+        currentQuestionIndex += direction;
+        if (currentQuestionIndex < 0) currentQuestionIndex = 0;
+        if (currentQuestionIndex >= testQuestions.length) currentQuestionIndex = testQuestions.length - 1;
+        loadTestQuestion();
+    } else if (currentMode === 'practice_run' && direction === -1) {
+        // --- 연습 모드 로직 (이전 버튼) ---
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadPracticeQuestion();
+        }
+    }
 }
 
 window.submitTest = () => {
@@ -502,7 +518,9 @@ window.showResults = (filter) => {
 // (7) 유틸리티 함수
 // ========================================================================
 
-/** 퀴즈 화면 UI를 모드에 맞게 설정 */
+/** * 퀴즈 화면 UI를 모드에 맞게 설정
+ * (수정) 연습 모드에서도 prevBtn을 표시하도록 변경
+ */
 function setupQuizScreen(mode, practiceMode = 'random') {
     if (mode === 'practice') {
         if (practiceMode === 'sequential') {
@@ -514,7 +532,7 @@ function setupQuizScreen(mode, practiceMode = 'random') {
         progressTracker.classList.add('hidden');
         practiceFeedback.classList.add('hidden');
         nextPracticeBtn.classList.add('hidden');
-        prevBtn.classList.add('hidden');
+        prevBtn.classList.remove('hidden'); // (수정) 이전 버튼 표시
         nextBtn.classList.add('hidden');
         submitBtn.classList.add('hidden');
         quitBtn.innerText = '연습 종료';
@@ -557,7 +575,7 @@ function getShuffledQuestions(categories, count) {
 }
 
 // ========================================================================
-// (8) (신규) 키보드 이벤트 핸들러
+// (8) (수정) 키보드 이벤트 핸들러
 // ========================================================================
 
 document.addEventListener('keydown', (event) => {
@@ -599,6 +617,11 @@ function handlePracticeKeys(event) {
                     checkPracticeAnswer(index, q.answer);
                 }
                 break;
+            // (수정) 연습 모드에서 'ArrowLeft' (왼쪽 화살표) 키로 이전 문제 이동
+            case 'ArrowLeft':
+                event.preventDefault();
+                navigateQuiz(-1);
+                break;
         }
     }
 }
@@ -624,7 +647,19 @@ function handleTestKeys(event) {
                 submitTest();
             } else {
                 // 다음 문제로 이동
-                navigateTest(1);
+                navigateQuiz(1); // (수정) navigateTest -> navigateQuiz
+            }
+            break;
+        // (수정) 시험 모드에서 화살표 키로 탐색
+        case 'ArrowLeft':
+            event.preventDefault();
+            navigateQuiz(-1);
+            break;
+        case 'ArrowRight':
+            event.preventDefault();
+            // 마지막 문제가 아닐 때만 다음 문제로 이동
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                navigateQuiz(1);
             }
             break;
     }
