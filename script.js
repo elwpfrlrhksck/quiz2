@@ -66,7 +66,7 @@ const categoryNames = {
     'rail_vehicle': '시스템-차량',
     'rail_communication': '시스템-통신',
     // [추가된 부분] 새로운 카테고리 이름 매핑
-    'dhdtladl200': '옹심이-기출'
+    'dhdtladl200': '옹심이 20문제 10회분'
 };
 
 // DOM 요소 캐싱 (자주 사용하는 요소)
@@ -686,3 +686,4 @@ function handleResultsKeys(event) {
 // (9) 초기 실행
 // ========================================================================
 goToMenu(); // 앱 시작 시 메뉴 화면 표시
+
