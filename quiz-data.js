@@ -16632,7 +16632,7 @@ const allQuestions = {
         "answer": 1,
         "explanation": "전원 ON -> \"삑\" 음 발생(자기진단 시작) -> 3초 경과 후 -> \"정상\" 음 발생 -> 5초 경과 후 -> LCD 표시등 점등 (정상 부팅 완료)"
     }
-    ]
+    ],
 
  /** 옹심이 20문제 1~10 */
     "dhdtladl200": [
@@ -18857,6 +18857,7 @@ const allQuestions = {
 ]
 
 };
+
 
 
 
