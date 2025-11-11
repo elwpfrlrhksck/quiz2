@@ -267,8 +267,13 @@ function loadPracticeQuestion() {
 }
 
 function checkPracticeAnswer(selectedIndex, correctIndex) {
+    // (수정) 이미 답을 확인했으면(피드백이 보이면) 함수를 즉시 종료
+    if (!practiceFeedback.classList.contains('hidden')) {
+        return;
+    }
+    
     const optionButtons = optionsContainer.querySelectorAll('.option-btn');
-    optionButtons.forEach(btn => btn.disabled = true);
+    optionButtons.forEach(btn => btn.disabled = true); // 버튼 비활성화
 
     if (selectedIndex === correctIndex) {
         feedbackMessage.innerText = '정답입니다!';
@@ -288,7 +293,8 @@ function checkPracticeAnswer(selectedIndex, correctIndex) {
             const categoryQuestions = allQuestions[key];
             
             if (categoryQuestions) {
-                const foundIndex = categoryQuestions.findIndex(item => item.question === q.question);
+                // (수정) q.question이 null이 아닌지 확인
+                const foundIndex = categoryQuestions.findIndex(item => item && item.question === q.question);
                 
                 if (foundIndex !== -1) {
                     if (foundIndex + 1 > (sequentialProgress[key] || 0)) {
@@ -305,6 +311,9 @@ function checkPracticeAnswer(selectedIndex, correctIndex) {
     explanationDiv.classList.remove('hidden');
     practiceFeedback.classList.remove('hidden');
     nextPracticeBtn.classList.remove('hidden');
+    
+    // (수정) Enter 키로 다음 문제로 넘어갈 수 있도록 포커스 이동 (선택 사항)
+    nextPracticeBtn.focus();
 }
 
 /**
@@ -548,6 +557,89 @@ function getShuffledQuestions(categories, count) {
 }
 
 // ========================================================================
-// (8) 초기 실행
+// (8) (신규) 키보드 이벤트 핸들러
+// ========================================================================
+
+document.addEventListener('keydown', (event) => {
+    // 텍스트 입력 필드 등에서 키 입력을 방지하기 위함
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+        return;
+    }
+
+    if (currentMode === 'practice_run') {
+        handlePracticeKeys(event);
+    } else if (currentMode === 'test_run') {
+        handleTestKeys(event);
+    } else if (currentMode === 'results') {
+        handleResultsKeys(event);
+    }
+});
+
+function handlePracticeKeys(event) {
+    // 피드백이 보이는지(답을 확인했는지) 여부
+    const feedbackVisible = !practiceFeedback.classList.contains('hidden');
+
+    if (feedbackVisible) {
+        // 피드백이 보이면 Enter 키로 다음 문제로 넘어감
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            nextPracticeQuestion();
+        }
+    } else {
+        // 피드백이 안 보이면(문제 푸는 중) 1~4 키로 답 선택
+        switch (event.key) {
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+                event.preventDefault();
+                const index = parseInt(event.key) - 1;
+                const q = practicePool[currentQuestionIndex];
+                if (q && index < q.options.length) {
+                    checkPracticeAnswer(index, q.answer);
+                }
+                break;
+        }
+    }
+}
+
+function handleTestKeys(event) {
+    switch (event.key) {
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+            event.preventDefault();
+            const index = parseInt(event.key) - 1;
+            const q = testQuestions[currentQuestionIndex];
+            if (q && index < q.options.length) {
+                selectTestAnswer(index);
+            }
+            break;
+        case 'Enter':
+            event.preventDefault();
+            const isLastQuestion = (currentQuestionIndex === testQuestions.length - 1);
+            if (isLastQuestion) {
+                // 마지막 문제에서는 Enter로 제출
+                submitTest();
+            } else {
+                // 다음 문제로 이동
+                navigateTest(1);
+            }
+            break;
+    }
+}
+
+function handleResultsKeys(event) {
+    // 결과 화면에서 Enter 키를 누르면 메뉴로
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        goToMenu();
+    }
+}
+
+
+// ========================================================================
+// (9) 초기 실행
 // ========================================================================
 goToMenu(); // 앱 시작 시 메뉴 화면 표시
