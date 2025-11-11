@@ -11,7 +11,9 @@ let sequentialProgress = {
     'rail_signal': 0,
     'rail_catenary': 0,
     'rail_vehicle': 0,
-    'rail_communication': 0
+    'rail_communication': 0,
+    // [추가된 부분] 새로운 카테고리 키 추가
+    'dhdtladl200': 0 
 };
 
 function saveProgress() {
@@ -62,7 +64,9 @@ const categoryNames = {
     'rail_signal': '시스템-신호',
     'rail_catenary': '시스템-전차선',
     'rail_vehicle': '시스템-차량',
-    'rail_communication': '시스템-통신'
+    'rail_communication': '시스템-통신',
+    // [추가된 부분] 새로운 카테고리 이름 매핑
+    'dhdtladl200': '옹심이-기출'
 };
 
 // DOM 요소 캐싱 (자주 사용하는 요소)
@@ -361,11 +365,15 @@ window.startTest = (testType) => {
         testQuestions = getShuffledQuestions(dieselCategories, requiredQuestions);
     } else if (testType === 'rail') {
         requiredQuestions = 20;
-        testQuestions = getShuffledQuestions(railCategories, requiredQuestions);
+        // railCategories에 dhdtladl200 카테고리를 포함하여 시험 문제 생성
+        const currentRailCategories = railCategories.concat('dhdtladl200');
+        testQuestions = getShuffledQuestions(currentRailCategories, requiredQuestions);
     } else if (testType === 'full') {
         requiredQuestions = 60;
         const dieselQs = getShuffledQuestions(dieselCategories, 40);
-        const railQs = getShuffledQuestions(railCategories, 20);
+        // railCategories에 dhdtladl200 카테고리를 포함하여 시험 문제 생성
+        const currentRailCategories = railCategories.concat('dhdtladl200');
+        const railQs = getShuffledQuestions(currentRailCategories, 20);
         testQuestions = dieselQs.concat(railQs);
         
         if(testQuestions.length < requiredQuestions) {
